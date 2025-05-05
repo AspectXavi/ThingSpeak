@@ -1,0 +1,26 @@
+#include <WiFi.h>
+#include "ThingSpeak.h"
+
+char ssid[] = "yourSSID";
+char pass[] = "yourPassword";
+WiFiClient client;
+
+unsigned long myChannelNumber = YOUR_CHANNEL_NUMBER;
+const char * myWriteAPIKey = "YOUR_WRITE_API_KEY";
+
+int value = 20;
+int step = 1;
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.begin(ssid, pass);
+  ThingSpeak.begin(client);
+}
+
+void loop() {
+  value += step;
+  if (value >= 40 || value <= 20) step = -step;
+
+  ThingSpeak.writeField(myChannelNumber, 1, value, myWriteAPIKey);
+  delay(15000); // wait 15s
+}
